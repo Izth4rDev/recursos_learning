@@ -1,8 +1,8 @@
 <template>
     <ul>
         <list-resource v-for="resource in resources" :key="resource.id"
-            :tittle="resource.tittle"
-            :description="resource.decription"
+            :title="resource.title"
+            :description="resource.description"
             :link="resource.link"
         ></list-resource>
     </ul>

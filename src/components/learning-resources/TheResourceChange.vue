@@ -3,7 +3,9 @@
         <base-button @click="setSelectedTab('StoredResource')" :mode="setStoredButton">Recursos Guardados</base-button>
         <base-button @click="setSelectedTab('AddResources')" :mode="setAddButton">Añadir Recurso</base-button>
     </base-card>
-    <component :is="selectedTab"></component>
+    <keep-alive>
+        <component :is="selectedTab"></component>
+    </keep-alive>
 </template>
 
 <script>
@@ -20,14 +22,14 @@ import AddResources from './AddResources.vue';
                 storedResources:[
                     {
                         id:'official-guide',
-                        tittle:'official Guide',
-                        decription:'The official Vue.js documentation', 
+                        title:'official Guide',
+                        description:'The official Vue.js documentation', 
                         link:'https://vuejs.org'
                     },
                     {
                         id:'Google',
-                        tittle:'Google',
-                        decription:'Learn to google', 
+                        title:'Google',
+                        description:'Learn to google', 
                         link:'https://google.com'
                     },
                 ]
@@ -35,8 +37,9 @@ import AddResources from './AddResources.vue';
         },
         provide(){ //inyectamos el array en el componente StoredResource.vue
             return{
-                resources: this.storedResources
-            }
+                resources: this.storedResources,
+                addRe: this.addResource
+            };
         },
         computed:{
             setAddButton(){
@@ -49,6 +52,18 @@ import AddResources from './AddResources.vue';
         methods:{
             setSelectedTab(tab){
                 this.selectedTab = tab;
+            },
+            addResource(title, description, url){
+                const newResource = {
+                    id: new Date().toISOString(),
+                    title: title,
+                    description: description,
+                    link: url
+                }
+                console.log(newResource.title + newResource.description);
+                console.log(newResource);
+                this.storedResources.unshift(newResource);
+                this.selectedTab = 'StoredResource'
             }
         }
     }
