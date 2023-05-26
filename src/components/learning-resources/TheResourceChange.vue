@@ -35,10 +35,11 @@ import AddResources from './AddResources.vue';
                 ]
             }
         },
-        provide(){ //inyectamos el array en el componente StoredResource.vue
+        provide(){ //metodo para inyectar recursos y metodos en componentes hijos
             return{
-                resources: this.storedResources,
-                addRe: this.addResource
+                resources: this.storedResources,//inyectamos el array en el componente StoredResource.vue
+                addRe: this.addResource,//inyectamos el metodo addResource en el componente addResource
+                removeRes: this.removeResource//Inyectamos el array en el componente ListResource
             };
         },
         computed:{
@@ -60,10 +61,12 @@ import AddResources from './AddResources.vue';
                     description: description,
                     link: url
                 }
-                console.log(newResource.title + newResource.description);
-                console.log(newResource);
                 this.storedResources.unshift(newResource);
                 this.selectedTab = 'StoredResource'
+            },
+            removeResource(resId){
+                const resIndex = this.storedResources.findIndex( res => res.id === resId);
+                this.storedResources.splice(resIndex, 1);
             }
         }
     }

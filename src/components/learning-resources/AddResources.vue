@@ -1,4 +1,15 @@
 <template>
+    <teleport to="body">
+        <base-dialog v-if="inputIsInvalid" :title="'Invalid input'" @close="closeModal">
+            <template #default>
+                <p>Lo siento, al menos uno de los valores son invalidos</p>
+                <p>Porfavor revisa los valores y asegurate de ingresarlos todos</p>
+            </template>
+            <template #actions>
+                <base-button @click="closeModal">Ok</base-button>
+            </template>
+        </base-dialog>
+    </teleport>
     <base-card>
     <form @submit.prevent="submitData">
         <div class="form-control">
@@ -24,13 +35,26 @@
 
 export default{
     inject:['addRe'],
+    data(){
+        return{
+            inputIsInvalid: false
+        }
+    },
     methods:{
         submitData(){
             const enteredTitle = this.$refs.titleInput.value;
             const enteredDesc = this.$refs.descInput.value;
             const enteredLink = this.$refs.linkInput.value;
 
+            if(enteredTitle.trim() === '' || enteredDesc.trim() === '' || enteredLink.trim() === ''){
+                this.inputIsInvalid = true;
+                return;
+            }
+
             this.addRe(enteredTitle, enteredDesc, enteredLink);
+        },
+        closeModal(){
+            this.inputIsInvalid = false;
         }
     }
 }
